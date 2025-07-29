@@ -6,6 +6,7 @@ import saladImg from"../../assets/assets/menu/salad-bg.jpg"
 import pizzaImg from"../../assets/assets/menu/pizza-bg.jpg"
 import dessertImg from "../../assets/assets/menu/dessert-bg.jpeg";
 import soupImg from "../../assets/assets/menu/soup-bg.jpg";
+
 import SectionTitle from "../../components/SectonTitle/SectionTitle";
 import MenuCategory from "./MenuCategory/MenuCategory";
 const Menu = () => {
@@ -16,6 +17,7 @@ const Menu = () => {
             
              const pizza = menu.filter(item => item.category === 'popular');
              const offered = menu.filter(item => item.category === 'popular');
+            
       return (
             <div >
                    <Helmet>
@@ -52,6 +54,8 @@ const Menu = () => {
              title="pizza"
              img={pizzaImg}
              ></MenuCategory> 
+             {/* drinks menu items*/}
+             
                
             </div>
       );
