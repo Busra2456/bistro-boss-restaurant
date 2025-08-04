@@ -16,6 +16,7 @@ const Menu = () => {
           const salad = menu.filter(item => item.category === 'popular');
             
              const pizza = menu.filter(item => item.category === 'popular');
+             
              const offered = menu.filter(item => item.category === 'popular');
             
       return (
@@ -54,7 +55,6 @@ const Menu = () => {
              title="pizza"
              img={pizzaImg}
              ></MenuCategory> 
-             {/* drinks menu items*/}
              
                
             </div>
