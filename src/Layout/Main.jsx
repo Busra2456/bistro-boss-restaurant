@@ -5,7 +5,8 @@ import NavBar from "../pages/Shared/NavBar/NavBar";
 const Main = () => {
        const location =useLocation()
       console.log(location)
-      const noHerderFooter = location.pathname.includes('login')
+      const noHerderFooter = location.pathname.includes('login') ||
+      location.pathname.includes('/signup')
       return (
             <div> 
                   {noHerderFooter || <NavBar></NavBar>}
