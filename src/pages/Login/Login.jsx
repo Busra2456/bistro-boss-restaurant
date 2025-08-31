@@ -6,6 +6,7 @@ import { AuthContext } from '../../provider/AuthProvider';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import Swal from 'sweetalert2';
+import SocialLogin from '../../components/SocialLogin/SocialLogin';
 const Login = () => {
  
   const [disabled,setDisabled] = useState(true)
@@ -99,7 +100,8 @@ Swal.fire({
 
           <input disabled={disabled} className="btn btn-neutral mt-4" type="submit" value="Login" />
 
-          <p><small>New Here?<Link to="/signup">Create an account</Link></small></p>
+          <p className='px-6'><small>New Here?<Link to="/signup">Create an account</Link></small></p>
+          <SocialLogin></SocialLogin>
         </div>
       </form>
     </div>

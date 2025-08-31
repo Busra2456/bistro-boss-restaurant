@@ -5,23 +5,34 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../provider/AuthProvider";
 import Swal from "sweetalert2";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
+import SocialLogin from "../../components/SocialLogin/SocialLogin";
 
 
  
 const SignUp = () => {
+  const axiosPublic = useAxiosPublic();
       const { register, handleSubmit,reset , formState: { errors } } = useForm();
        const {createUser, updateUserProfile} =useContext(AuthContext)
        const navigate = useNavigate()
        const onSubmit = (data) =>{
-            console.log(data)
+           
             createUser(data.email, data.password)
             .then((result) => {
                   const loggedUser = result.user;
                   console.log(loggedUser)
                   updateUserProfile(data.name,data.photoURL)
                   .then(()=>{
-                    console.log('user profile info updated')
-                   reset();
+                  //create user entry in the database
+                  const userInfo ={
+                   name: data.name,
+                   email: data.email
+                    }
+                    axiosPublic.post('/users',userInfo)
+                    .then(res =>{
+                      if(res.data.insertedId){
+                        console.log('user added to the database')
+                          reset();
                    
 Swal.fire({
   position: "top-end",
@@ -31,6 +42,20 @@ Swal.fire({
   timer: 1500
 });
 navigate('/');
+
+                      }
+                    })
+                  
+//                    reset();
+                   
+// Swal.fire({
+//   position: "top-end",
+//   icon: "success",
+//   title: "User created successfully",
+//   showConfirmButton: false,
+//   timer: 1500
+// });
+// navigate('/');
                   })
                   .catch(error => console.log(error))
                   
@@ -108,7 +133,8 @@ navigate('/');
 
           <input  className="btn btn-neutral mt-4" type="submit" value="Sign Up" />
 
-          <p><small>Already have an account<Link to="/login">Create an account</Link></small></p>
+          <p className="px-6"><small>Already have an account<Link to="/login">Create an account</Link></small></p>
+          <SocialLogin></SocialLogin>
         </div>
       </form>
     </div>
