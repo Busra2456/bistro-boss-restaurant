@@ -1,11 +1,50 @@
 import { useForm } from "react-hook-form";
 import SectionTitle from "../../../components/SectonTitle/SectionTitle";
 import { FaUtensils } from "react-icons/fa";
-
+import useAxiosPublic from "../../../hooks/useAxiosPublic";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import Swal from "sweetalert2";
+const image_hosting_key =import.meta.env.VITE_IMAGE_HOSTING_KEY;
+const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
 const AddItems = () => {
-       const { register, handleSubmit } = useForm()
-  const onSubmit = (data) => {
+       const { register, handleSubmit , reset} = useForm();
+       const axiosPublic = useAxiosPublic();
+       const axiosSecure = useAxiosSecure()
+  const onSubmit = async (data) => {
       console.log(data)
+      //image upload to imgbb and then get an url
+      const imageFile = {image: data.image[0]}
+      const res = await axiosPublic.post(image_hosting_api,imageFile,{
+        headers:{
+          'content-type' : 'multipart/form-data'
+        }
+      });
+      if (res.data.success){
+        //now send the menu item to the server with the image url
+        const menuItem = {
+          name: data.name,
+          category:data.category,
+          price: parseFloat(data.price),
+          recipe: data.recipe,
+          image:res.data.data.display_url
+        }
+        //
+        const menuRes = await axiosSecure.post('/menu',menuItem);
+        console.log('da o',menuRes.data);
+        if(menuRes.data.insertedId){
+          // show success popup
+          reset();
+          Swal.fire({
+  position: "top-end",
+  icon: "success",
+  title: `${data.name} is added to the menu.`,
+  showConfirmButton: false,
+  timer: 1500
+});
+
+        }
+      }
+      console.log('paisy',res.data);
 };
       return (
             <div className="text-4xl ">
@@ -30,8 +69,8 @@ const AddItems = () => {
         <div className="form-control w-full">
             <fieldset className="fieldset">
   <legend className="fieldset-legend">Category Name*</legend>
- <select {...register("category",{required: true})} className="select w-full ">
-    <option disabled={true}>Select a category</option>
+ <select defaultValue="default" {...register("category",{required: true})} className="select w-full ">
+    <option disabled={true} value="default">Select a category</option>
    <option value="Salad">salad</option>
      <option value="Pizza">Pizza</option>
     <option value="Soups">Soups</option>
