@@ -35,7 +35,6 @@ Swal.fire({
     })
   }
 });
-
       }
       return (
             <div >
